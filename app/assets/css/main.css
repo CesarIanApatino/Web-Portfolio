@@ -385,6 +385,9 @@ body {
 .border-t-2 {
   border-top: 2px solid;
 }
+.force-red {
+  background-color: #dc2626 !important;
+}
 
 .border-white {
   border-color: #fff;
@@ -395,7 +398,7 @@ body {
 }
 
 .brutal-border-red {
-  border: 2px solid #ff0000;
+  border: 4px solid #ff0000;
 }
 
 /* Transitions */
@@ -665,4 +668,95 @@ body {
       flex-direction: row;
     }
   }
+}
+.corner-bracket-tl::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff0000;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.divider-dashed {
+  flex: 1;
+  border-top: 2px dashed rgba(255, 255, 255, 0.15);
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.corner-bracket-tl {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 2rem;
+  height: 2rem;
+  border-top: 3px solid rgba(255, 255, 255, 0.397);
+  border-left: 3px solid rgba(255, 255, 255, 0.397);
+  z-index: 30;
+}
+
+.corner-bracket-tr {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 2rem;
+  height: 2rem;
+  border-top: 3px solid rgba(255, 255, 255, 0.397);
+  border-right: 3px solid rgba(255, 255, 255, 0.397);
+  z-index: 30;
+}
+/* Dots */
+.dot-red {
+  width: 8px;
+  height: 8px;
+  background-color: #ff0000;
+}
+
+.dot-muted {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Icon box */
+.icon-box {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.icon-box:hover {
+  border-color: #ff0000;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+/* Text opacity variants */
+.text-muted {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.text-muted-75 {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.text-muted-40 {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Bottom border */
+.dot-muted {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.dot-red, .dot-muted {
+  flex-shrink: 0;
 }

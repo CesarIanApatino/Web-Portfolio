@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import ProjectCard from './ProjectCard.vue'
+import Avatar from 'primevue/avatar';
+import { Experience } from './TimelineItem'
 
 const projects = ref([
   {
@@ -11,7 +12,8 @@ const projects = ref([
     year: '2025',
     tags: ['Java'],
     demoUrl: 'https://github.com/username/project1',
-    codeUrl: 'https://github.com/username/project1'
+    codeUrl: 'https://github.com/username/project1',
+    images: ['/Icon/Laravel.png', '/Icon/Three.png', '/Icon/gsap.png', '/Icon/monitor_958857.png', '/Icon/system-design.svg']
   },
   {
     id: 2,
@@ -39,22 +41,44 @@ const skills = ref([
  'TYPESCRIPT', 'VUE.JS', 'NUXT',
   'THREE.JS', 'GSAP', 'NODE.JS',
   'PYTHON', 'DESIGN', 'UI/UX', 'LARAVEL',
-  'PHP'
+  'PHP','JAVA'
 ])
 
-const experience = ref([
+const experience = ref<Experience[]>([
+  // — TECH —
   {
     id: 1,
+    type: 'tech' as const,
     company: 'Engtech Global Solution Inc.',
     position: 'Junior Fullstack Developer',
     period: '2025 - PRESENT',
-    description: 'Contributed on development of interactive web experiences using modern frameworks.',
+    description: 'Full-stack development of enterprise ERP systems, delivering 4–5 tasks weekly across the Accounting module.',
     achievements: [
-      'Contributed to full-stack development of enterprise ERP systems Accounting module, completing 4-5 tasks weekly based on complexity',
-      'Accelerated project delivery by quickly adapting to complex codebase and learning new technical skills independently',
-      'Contributed to technical discussions and brainstorming sessions, identifying potential issues and proposing practical solutions'
+      'Rapidly adapted to a complex legacy codebase and contributed meaningfully within the first month',
+      'Contributed to technical discussions, identifying edge cases and proposing practical solutions',
+    ],
+    images: [
     ]
-  }
+  },
+  // — OTHER —
+  {
+    id: 2,
+    type: 'other' as const,
+    company: 'Self-Employed',
+    position: 'Carpenter / Construction Helper',
+    period: '2022 - 2023',
+    description: 'Hands-on construction and carpentry work. Built discipline, attention to detail, and the ability to work under physical and time pressure.',
+    achievements: [],
+  },
+  {
+    id: 3,
+    type: 'other' as const,
+    company: 'Various Clients',
+    position: 'Data Encoder',
+    period: '2023 - 2024',
+    description: 'Encoded and organized large volumes of data with high accuracy. Strengthened focus, consistency, and data handling skills.',
+    achievements: [],
+  },
 ])
 
 onMounted(() => {
@@ -91,52 +115,109 @@ onMounted(() => {
           <div class="brutal-border p-1 mb-4 inline-block">
             <span class="font-mono text-xs tracking-widest">[ ABOUT ]</span>
           </div>
-          
-          <h2 class="font-display text-5xl md:text-7xl mb-8 leading-tight">
-            TRANSFORMING<br/>
-            IDEAS INTO<br/>
-            <span class="text-brutalist-red">REALITY</span>
-          </h2>
-          
-          <div class="grid md:grid-cols-2 gap-12 mt-12">
-            <div class="brutal-border p-8">
-              <p class="font-mono text-sm leading-relaxed opacity-80">
-                Hey, I'm Ian. I'm a person who loves programming, designing websites and apps. I enjoy making things that look nice and are easy for people to use.
-                I like learning new things and working on projects that help me get better. If you want to work together or see what I can do, check out my portfolio below!
-              </p>
-            </div>
+        <div class="grid md:grid-cols-2 mt-12 border-t-4 border-black">
+
+          <div class="relative border-r-0 md:border-r-4 border-white/20 border-b-4 md:border-b-0">
             
-            <div class="brutal-border brutal-border-red p-8">
-              <p class="font-mono text-xs tracking-widest mb-4">CURRENT FOCUS:</p>
-              <ul class="font-mono text-sm space-y-2">
-                <li>> Thres.js & GSAP</li>
-                <li>> NUXT</li>
-                <li>> Laravel</li>
-                <li>> System Design</li>
-              </ul>
+            <div class="corner-bracket-tl" />
+            <div class="corner-bracket-tr" />
+
+            <div class="w-full h-[340px] px-6 pb-6 pt-6">
+              <ClientOnly>
+                <FallingText
+                  text="TRANSFORMING IDEAS INTO REALITY"
+                  :highlight-words="['REALITY']"
+                  trigger="hover"
+                  :gravity="1.2"
+                  font-size="clamp(2.2rem, 4.5vw, 4rem)"
+                />
+              </ClientOnly>
             </div>
           </div>
+
+          <!-- RIGHT: About Panel -->
+          <div class="relative bg-black text-white p-8 flex flex-col gap-6 min-h-[360px]">
+            
+            <!-- Red top-right corner dot -->
+            <div class="absolute top-0 right-0 w-4 h-4 bg-red-600" />
+
+            <!-- Section label -->
+            <span class="text-[10px] font-black tracking-[0.25em] uppercase text-white/30">
+              — WHO I AM
+            </span>
+
+            <!-- Bio text -->
+            <p class="font-mono text-sm leading-relaxed text-white/75 max-w-sm">
+              Hey, I'm <span class="text-white font-black not-italic">Ian</span> — a developer passionate 
+              about building things that look great and feel effortless to use. 
+              Always learning, always building.
+            </p>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3">
+              <div class="divider-dashed" />
+              <span>Currently Exploring</span>
+              <div class="divider-dashed" />
+            </div>
+
+            <!-- Tech Stack Grid -->
+            <div class="grid grid-cols-4 gap-3">
+
+              <!-- Laravel -->
+              <div class="group flex flex-col items-center gap-2">
+                <div class="icon-box">
+                  <Avatar image="/Icon/laravel.svg" size="large" shape="square"
+                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+                </div>
+                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Laravel</span>
+              </div>
+
+              <!-- GSAP -->
+              <div class="group flex flex-col items-center gap-2">
+                <div class="icon-box">
+                  <Avatar image="/Icon/gsap.svg" size="large" shape="square"
+                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+                </div>
+                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">GSAP</span>
+              </div>
+
+              <!-- Three.js -->
+              <div class="group flex flex-col items-center gap-2">
+                <div class="icon-box">
+                  <Avatar image="/Icon/Three.svg" size="large" shape="square"
+                    :style="{ width: '100%', height: '100%', objectFit: 'contain', background: 'white' }" />
+                </div>
+                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Three.js</span>
+              </div>
+
+              <!-- System Design -->
+              <div class="group flex flex-col items-center gap-2">
+                <div class="icon-box">
+                  <Avatar image="/Icon/system-design.svg" size="large" shape="square"
+                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+                </div>
+                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">System Design</span>
+              </div>
+            </div>
+
+            <!-- Bottom stat strip -->
+            <div class="border-top-muted mt-auto pt-4 flex justify-between items-center">
+              <span class="font-mono text-muted" style="font-size: 10px; letter-spacing: 0.1em;">EST. 2025</span>
+              <div class="flex gap-1">
+                <div class="dot-red" />
+                <div class="dot-muted" />
+                <div class="dot-muted" />
+              </div>
+            </div>
+
+          </div>
+        </div>
         </div>
       </section>
 
       <!-- Projects Section -->
       <section class="fade-in-section min-h-screen py-24">
-        <div class="brutal-border p-1 mb-4 inline-block">
-          <span class="font-mono text-xs tracking-widest">[ SELECTED WORK ]</span>
-        </div>
-        
-        <h2 class="font-display text-5xl md:text-7xl mb-16 leading-tight">
-          PERSONAL & SCHOOL PROJECTS
-        </h2>
-
-        <div class="space-y-8">
-          <ProjectCard
-            v-for="(project, index) in projects"
-            :key="project.id"
-            :project="project"
-            :index="index"
-          />
-        </div>
+        <Test />
       </section>
 
       <!-- Experience/Timeline Section -->
@@ -144,18 +225,38 @@ onMounted(() => {
         <div class="brutal-border p-1 mb-4 inline-block">
           <span class="font-mono text-xs tracking-widest">[ EXPERIENCE ]</span>
         </div>
-        
+
         <h2 class="font-display text-5xl md:text-7xl mb-16 leading-tight">
           WORK<br/>
           <span class="text-brutalist-red">HISTORY</span>
         </h2>
 
-        <div class="space-y-8">
-          <TimelineItem
-            v-for="exp in experience"
-            :key="exp.id"
-            :experience="exp"
-          />
+        <!-- TECH -->
+        <div style="margin-bottom: 3rem;">
+          <p style="font-family: monospace; font-size: 0.65rem; letter-spacing: 0.25em; color: #dc2626; text-transform: uppercase; margin-bottom: 1.5rem;">
+            — TECH
+          </p>
+          <div class="space-y-8">
+            <TimelineItem
+              v-for="exp in experience.filter(e => e.type === 'tech')"
+              :key="exp.id"
+              :experience="exp"
+            />
+          </div>
+        </div>
+
+        <!-- OTHER -->
+        <div>
+          <p style="font-family: monospace; font-size: 0.65rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 1.5rem;">
+            — OTHER
+          </p>
+          <div class="space-y-4">
+            <TimelineItem
+              v-for="exp in experience.filter(e => e.type === 'other')"
+              :key="exp.id"
+              :experience="exp"
+            />
+          </div>
         </div>
       </section>
 

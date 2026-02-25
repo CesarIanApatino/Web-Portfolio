@@ -7,7 +7,8 @@ export default defineNuxtConfig({
   
   modules: [
     '@tresjs/nuxt',
-    '@vueuse/motion/nuxt'
+    '@vueuse/motion/nuxt',
+    '@primevue/nuxt-module'
   ],
   
   css: [
