@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import Avatar from 'primevue/avatar';
-import { Experience } from './TimelineItem'
+import type { Experience } from './TimelineItem.vue'
+import ContactForm from './ContactForm.vue'
+import FallingText from './FallingText.vue'
+import Test from './Test.vue'
+import Masonry from './Masonry.vue'
 
 const projects = ref([
   {
@@ -80,6 +84,36 @@ const experience = ref<Experience[]>([
     achievements: [],
   },
 ])
+
+const techLogos = ref([
+  { 
+    node: '<i class="pi pi-code" style="font-size: 2rem;"></i>', 
+    title: "Development", 
+    href: "https://vuejs.org" 
+  },
+  { 
+    node: '<i class="pi pi-desktop" style="font-size: 2rem;"></i>', 
+    title: "Frontend", 
+    href: "https://vitejs.dev" 
+  },
+  { 
+    node: '<i class="pi pi-server" style="font-size: 2rem;"></i>', 
+    title: "Backend", 
+    href: "https://nodejs.org" 
+  },
+  { 
+    node: '<i class="pi pi-database" style="font-size: 2rem;"></i>', 
+    title: "Database", 
+    href: "https://www.postgresql.org" 
+  },
+]);
+
+// Alternative with image sources
+const imageLogos = [
+  { src: "/logos/company1.png", alt: "Company 1", href: "https://company1.com" },
+  { src: "/logos/company2.png", alt: "Company 2", href: "https://company2.com" },
+  { src: "/logos/company3.png", alt: "Company 3", href: "https://company3.com" },
+];
 
 onMounted(() => {
   const sections = document.querySelectorAll('section')
@@ -262,111 +296,97 @@ onMounted(() => {
 
       <!-- Skills Section -->
       <section class="fade-in-section min-h-screen py-24">
-        <div class="brutal-border p-1 mb-4 inline-block">
-          <span class="font-mono text-xs tracking-widest">[ CAPABILITIES ]</span>
-        </div>
-        
-        <h2 class="font-display text-5xl md:text-7xl mb-16 leading-tight">
-          SKILLS
-        </h2>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div
-            v-for="skill in skills"
-            :key="skill"
-            class="brutal-border p-6 hover:bg-white hover:text-black transition-all duration-300 text-center cursor-pointer"
-          >
-            <span class="font-mono text-sm tracking-widest">
-              {{ skill }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid md:grid-cols-3 gap-8 mt-16">
-          <div class="brutal-border-red p-8 text-center hover:bg-brutalist-red hover:text-black transition-all duration-300 cursor-pointer">
-            <p class="font-display text-5xl mb-2">3</p>
-            <p class="font-mono text-xs tracking-widest opacity-70">PROJECTS</p>
-          </div>
-          <div class="brutal-border p-8 text-center hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-            <p class="font-display text-5xl mb-2">7</p>
-            <p class="font-mono text-xs tracking-widest opacity-70">MONTHS EXP</p>
-          </div>
-          <div class="brutal-border p-8 text-center hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-            <p class="font-display text-5xl mb-2">∞</p>
-            <p class="font-mono text-xs tracking-widest opacity-70">CREATIVITY</p>
-          </div>
+        <div class="tes">
+        <Masonry />
         </div>
       </section>
 
       <!-- Contact Section -->
-      <section class="fade-in-section min-h-screen flex items-center py-24">
-        <div class="w-full">
-          <div class="brutal-border p-1 mb-4 inline-block">
-            <span class="font-mono text-xs tracking-widest">[ CONNECT ]</span>
-          </div>
-          
-          <h2 class="font-display text-5xl md:text-8xl mb-16 leading-tight">
-            LET'S<br/>
-            <span class="text-brutalist-red">WORK</span><br/>
-            TOGETHER
-          </h2>
-
-          <div class="mb-16 text-center">
-            <div class="brutal-border p-1 mb-4 inline-block">
-              <span class="font-mono text-xs tracking-widest">[ CONNECT ]</span>
+      <section class="contact-section">
+        <div class="contact-wrapper">
+          <!-- Header -->
+          <div class="contact-header">
+            <div class="label-box">
+              <span>CONNECT</span>
             </div>
-            <div class="grid md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              <a 
-                href="mailto:your.email@example.com"
-                class="brutal-border p-6 hover:bg-white hover:text-black transition-all duration-300 cursor-pointer text-center text-white no-underline"
-              >
-                <p class="font-mono text-xs tracking-widest mb-2 opacity-50">EMAIL</p>
-                <p class="font-mono text-sm">cesar.ian.apatino23@gmail.com</p>
+            
+            <h2 class="contact-title">
+              LET'S<br/>
+              <span class="red-text">WORK</span><br/>
+              TOGETHER
+            </h2>
+          </div>
+
+          <!-- Main Grid Layout -->
+          <div class="contact-grid">
+            <!-- Left Column - Contact Info -->
+            <div class="contact-info-column">
+              <!-- Email Block -->
+              <a href="mailto:cesar.ian.apatino23@gmail.com" class="info-block red-block">
+                <div class="block-header">
+                  <span class="block-number">01</span>
+                  <span class="block-label">EMAIL</span>
+                </div>
+                <div class="block-content">
+                  cesar.ian.apatino23@gmail.com
+                </div>
+                <div class="block-arrow">→</div>
               </a>
-              
-              <div class="brutal-border p-6 hover:bg-white hover:text-black transition-all duration-300 cursor-pointer text-center text-white">
-                <p class="font-mono text-xs tracking-widest mb-2 opacity-50">LOCATION</p>
-                <p class="font-mono text-sm">Butuan City, Philippines</p>
+
+              <!-- Location Block -->
+              <div class="info-block white-block">
+                <div class="block-header">
+                  <span class="block-number">02</span>
+                  <span class="block-label">LOCATION</span>
+                </div>
+                <div class="block-content">
+                  Butuan City, Philippines
+                </div>
               </div>
-              
-              <a 
-                href="https://github.com/GameSa0" 
-                target="_blank"
-                class="brutal-border p-6 hover:bg-white hover:text-black transition-all duration-300 cursor-pointer text-center text-white no-underline"
-              >
-                <p class="font-mono text-xs tracking-widest mb-2 opacity-50">GITHUB</p>
-                <p class="font-mono text-sm">github.com/GameSa0</p>
+
+              <!-- GitHub Block -->
+              <a href="https://github.com/GameSa0" target="_blank" class="info-block red-block">
+                <div class="block-header">
+                  <span class="block-number">03</span>
+                  <span class="block-label">GITHUB</span>
+                </div>
+                <div class="block-content">
+                  github.com/GameSa0
+                </div>
+                <div class="block-arrow">→</div>
               </a>
-              
-              <a 
-                href="https://linkedin.com/in/yourname" 
-                target="_blank"
-                class="brutal-border p-6 hover:bg-white hover:text-black transition-all duration-300 cursor-pointer text-center text-white no-underline"
-              >
-                <p class="font-mono text-xs tracking-widest mb-2 opacity-50">LINKEDIN</p>
-                <p class="font-mono text-sm">None</p>
+
+              <!-- LinkedIn Block -->
+              <a href="https://www.linkedin.com/in/cesar-ian-apatino-b217893ab/" target="_blank" class="info-block red-block">
+                <div class="block-header">
+                  <span class="block-number">04</span>
+                  <span class="block-label">LINKEDIN</span>
+                </div>
+                <div class="block-content">
+                  linkedin.com/in/cesar-ian-apatino-b217893ab
+                </div>
+                <div class="block-arrow">→</div>
+              </a>
+
+              <!-- Download CV Block -->
+              <a href="/assets/CV/resume.pdf" download class="info-block cv-block">
+                <div class="cv-content">
+                  <span class="cv-icon">↓</span>
+                  <span class="cv-text">DOWNLOAD CV</span>
+                </div>
               </a>
             </div>
-          </div>
-
-          <!-- Contact Form -->
-          <div class="max-w-2xl mx-auto">
-            <div class="brutal-border p-1 mb-2 inline-block">
-              <span class="font-mono text-xs tracking-widest">[ SEND MESSAGE ]</span>
+            <div>
+                <ContactForm />
             </div>
-            <ContactForm />
           </div>
-
-          <!-- CTA -->
-          <div class="mt-16 text-center">
-            <a 
-              href="/assets/CV/resume.pdf" 
-              download
-              class="brutal-border-red px-12 py-6 font-mono text-sm tracking-widest text-white hover:bg-brutalist-red hover:text-black transition-all duration-300 inline-block no-underline"
-            >
-              DOWNLOAD CV
-            </a>
+          <!-- Footer -->
+          <div class="contact-footer">
+            <div class="footer-line"></div>
+            <div class="footer-content">
+              <span class="footer-item">© 2024 CESAR IAN APATINO</span>
+              <span class="footer-item">TO LAZY TO DESIGN</span>
+            </div>
           </div>
         </div>
       </section>
@@ -416,5 +436,219 @@ onMounted(() => {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #fff;
+}
+.contact-section {
+  min-height: 100vh;
+  background: #000;
+  padding: 6rem 1.5rem 4rem;
+}
+
+.contact-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.contact-header {
+  margin-bottom: 4rem;
+}
+
+.label-box {
+  border: 2px solid #fff;
+  display: inline-block;
+  padding: 6px 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+}
+
+.label-box.small {
+  padding: 4px 12px;
+  font-size: 9px;
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.9;
+  color: #fff;
+}
+
+.red-text {
+  color: #FF0000;
+}
+
+/* Main Grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Left Column - Info Blocks */
+.contact-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-block {
+  border: 2px solid #fff;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+  display: block;
+}
+
+.red-block {
+  border-color: #FF0000;
+  border-width: 3px;
+}
+
+.red-block:hover {
+  background: #FF0000;
+  color: #000;
+}
+
+.red-block:hover .block-arrow {
+  transform: translateX(5px);
+}
+
+.white-block:hover {
+  background: #fff;
+  color: #000;
+}
+
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.block-number {
+  font-size: 10px;
+  opacity: 0.5;
+  letter-spacing: 0.1em;
+}
+
+.block-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+}
+
+.block-content {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+.block-arrow {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* CV Block */
+.cv-block {
+  background: #fff;
+  color: #000;
+  border: 3px solid #fff;
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cv-block:hover {
+  background: #FF0000;
+  border-color: #FF0000;
+  color: #fff;
+}
+
+.cv-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.15em;
+}
+
+.cv-icon {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+/* Footer */
+.contact-footer {
+  margin-top: 4rem;
+}
+
+.footer-line {
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  margin-bottom: 2rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #fff;
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-info-column {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .cv-block {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 4rem 1rem 2rem;
+  }
+
+  .contact-info-column {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-block {
+    grid-column: span 1;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 }
 </style>
