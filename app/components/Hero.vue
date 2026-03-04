@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TresCanvas } from '@tresjs/core'
 import { OrbitControls } from '@tresjs/cientos'
-import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
+import { ref, shallowRef, onMounted, onUnmounted, computed } from 'vue'
 import { use3DAnimation } from '~/composables/Use3danimation'
 
 const gl = shallowRef()
@@ -9,7 +9,13 @@ const scrollProgress = ref(0)
 const torusRef = shallowRef()
 const { animateShapes, animateOnScroll } = use3DAnimation()
 
-const cameraPosition = ref<[number, number, number]>([7, 10, 10])
+const baseCameraPosition = ref<[number, number, number]>([7, 10, 10])
+const cameraDistance = 13
+const mouseX = ref(0)
+const mouseY = ref(0)
+const isMouseDown = ref(false)
+
+const cameraPosition = computed(() => baseCameraPosition.value)
 
 const handleScroll = () => {
   const heroSection = document.querySelector('.hero-3d')
@@ -20,8 +26,40 @@ const handleScroll = () => {
   }
 }
 
+const handleMouseMove = (event: MouseEvent) => {
+  if (!isMouseDown.value) return
+
+  const heroSection = document.querySelector('.hero-3d')
+  if (!heroSection) return
+
+  const rect = heroSection.getBoundingClientRect()
+  
+  mouseX.value = ((event.clientX - rect.left) / rect.width) * 2 - 1
+  mouseY.value = ((event.clientY - rect.top) / rect.height) * 2 - 1
+
+  const phi = Math.atan2(mouseX.value, 1) * 2.0
+  const theta = Math.acos(Math.max(-1, Math.min(1, -mouseY.value))) * 2.0
+
+  const newX = cameraDistance * Math.sin(theta) * Math.sin(phi)
+  const newY = cameraDistance * Math.cos(theta)
+  const newZ = cameraDistance * Math.sin(theta) * Math.cos(phi)
+
+  baseCameraPosition.value = [newX, newY, newZ]
+}
+
+const handleMouseDown = () => {
+  isMouseDown.value = true
+}
+
+const handleMouseUp = () => {
+  isMouseDown.value = false
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mousedown', handleMouseDown)
+  document.addEventListener('mouseup', handleMouseUp)
   
   if (torusRef.value) {
     animateShapes([torusRef.value])
@@ -30,6 +68,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('mousedown', handleMouseDown)
+  document.removeEventListener('mouseup', handleMouseUp)
 })
 </script>
 
@@ -65,7 +106,7 @@ onUnmounted(() => {
       />
 
       <!-- Left Box: Large white wireframe cube at origin [0,0,0] -->
-      <TresMesh :position="[-6, 0, 0]" :rotation="[0.5, 0.5, 0]">
+      <TresMesh :position="[-8, -1, 2]" :rotation="[0.5, 0.5, 0]">
         <TresBoxGeometry :args="[2, 2, 2]" />
         <TresMeshBasicMaterial
           color="#ffffff"
@@ -75,7 +116,7 @@ onUnmounted(() => {
       </TresMesh>
 
       <!-- Right Icosahedron: White wireframe icosahedron at [3,2,-1] -->
-      <TresMesh :position="[3, 2, -1]" :rotation="[0, 0, 0]">
+      <TresMesh :position="[6, 3, -2]" :rotation="[0, 0, 0]">
         <TresIcosahedronGeometry :args="[0.8, 0]" />
         <TresMeshBasicMaterial
           color="#ffffff"
@@ -93,7 +134,7 @@ onUnmounted(() => {
       </TresMesh>
 
       <!-- Bottom-Left Box: Small white wireframe cube at [-2,-2,1] -->
-      <TresMesh :position="[-2, -2, 1]" :rotation="[0.3, 0.3, 0.3]">
+      <TresMesh :position="[-3, -4, 1]" :rotation="[0.3, 0.3, 0.3]">
         <TresBoxGeometry :args="[1, 1, 1]" />
         <TresMeshBasicMaterial
           color="#ffffff"
@@ -102,7 +143,7 @@ onUnmounted(() => {
       </TresMesh>
 
       <!-- Top-Left Octahedron: White wireframe octahedron at [-1,3,-2] -->
-      <TresMesh :position="[-1, 3, -2]" :rotation="[0, 0.4, 0]">
+      <TresMesh :position="[-2, 4, -3]" :rotation="[0, 0.4, 0]">
         <TresOctahedronGeometry :args="[0.7]" />
         <TresMeshBasicMaterial
           color="#ffffff"
@@ -111,7 +152,7 @@ onUnmounted(() => {
       </TresMesh>
 
       <!-- Right-Bottom Cone: Red wireframe cone at [2.5,-1.5,0] -->
-      <TresMesh :position="[2.5, -1.5, 0]" :rotation="[0.2, 0, 0]">
+      <TresMesh :position="[4, -3, 1]" :rotation="[0.2, 0, 0]">
         <TresConeGeometry :args="[0.6, 1.5, 4]" />
         <TresMeshBasicMaterial
           color="#ff0000"
@@ -120,10 +161,91 @@ onUnmounted(() => {
       </TresMesh>
 
       <!-- Far-Right Torus: Small white wireframe torus at [4,-0.5,-3] -->
-      <TresMesh :position="[4, -0.5, -3]" :rotation="[1, 0, 0.5]">
+      <TresMesh :position="[5, 1, -4]" :rotation="[1, 0, 0.5]">
         <TresTorusGeometry :args="[0.5, 0.15, 6, 12]" />
         <TresMeshBasicMaterial
           color="#ffffff"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Sphere: Red wireframe sphere at [2, 3, 2] -->
+      <TresMesh :position="[3, 5, 3]" :rotation="[0.4, 0.6, 0.2]">
+        <TresSphereGeometry :args="[0.9, 8, 8]" />
+        <TresMeshBasicMaterial
+          color="#ff0000"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Dodecahedron: White wireframe at [-4, 2, 3] -->
+      <TresMesh :position="[-6, 3, 4]" :rotation="[0.3, 0.5, 0.7]">
+        <TresDodecahedronGeometry :args="[0.6]" />
+        <TresMeshBasicMaterial
+          color="#ffffff"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Tetrahedron: Red wireframe at [1, -3, -2] -->
+      <TresMesh :position="[2, -5, -3]" :rotation="[0.2, 0.8, 0.4]">
+        <TresTetrahedronGeometry :args="[0.7]" />
+        <TresMeshBasicMaterial
+          color="#ff0000"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Cylinder: White wireframe at [-2, 1, 4] -->
+      <TresMesh :position="[-3, 2, 5]" :rotation="[0.5, 0.2, 0.3]">
+        <TresCylinderGeometry :args="[0.5, 0.5, 1.2, 8]" />
+        <TresMeshBasicMaterial
+          color="#ffffff"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Pyramid: Red wireframe at [5, 1, -1] -->
+      <TresMesh :position="[6, 2, -2]" :rotation="[0.1, 0.3, 0.6]">
+        <TresPlaneGeometry :args="[1, 1, 4, 4]" />
+        <TresMeshBasicMaterial
+          color="#ff0000"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Random Icosahedron: White wireframe at [-3, -2, 2] -->
+      <TresMesh :position="[-4, -3, 3]" :rotation="[0.7, 0.4, 0.5]">
+        <TresIcosahedronGeometry :args="[0.75, 1]" />
+        <TresMeshBasicMaterial
+          color="#ffffff"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Additional Sphere: Red wireframe at [1, 4, -4] -->
+      <TresMesh :position="[1, 5, -5]" :rotation="[0.6, 0.3, 0.4]">
+        <TresSphereGeometry :args="[0.8, 8, 8]" />
+        <TresMeshBasicMaterial
+          color="#ff0000"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Additional Octahedron: White wireframe at [-5, -3, -3] -->
+      <TresMesh :position="[-7, -4, -4]" :rotation="[0.5, 0.6, 0.3]">
+        <TresOctahedronGeometry :args="[0.65]" />
+        <TresMeshBasicMaterial
+          color="#ffffff"
+          :wireframe="true"
+        />
+      </TresMesh>
+
+      <!-- Additional Cone: Red wireframe at [4, 4, 2] -->
+      <TresMesh :position="[5, 4, 3]" :rotation="[0.4, 0.2, 0.5]">
+        <TresConeGeometry :args="[0.55, 1.3, 5]" />
+        <TresMeshBasicMaterial
+          color="#ff0000"
           :wireframe="true"
         />
       </TresMesh>
