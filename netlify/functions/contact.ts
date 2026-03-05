@@ -167,16 +167,18 @@ export const handler: Handler = async (event): Promise<HandlerResponse> => {
       };
     }
     
-    if (submissionAge < 3000) {
+    const isProduction = process.env.CONTEXT === 'production'
+    const minTime = isProduction ? 2000 : 0
+    
+    if (submissionAge < minTime) {
       console.warn('Too-fast submission detected', { clientIP, submissionAge });
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Submission too fast' }),
+        body: JSON.stringify({ error: 'Please take a moment to fill out the form' }),
         headers: { 'Content-Type': 'application/json' }
       };
     }
   }
-
   const sanitizedName = sanitizeInput(name, 100);
   const sanitizedEmail = sanitizeInput(email, 255);
   const sanitizedMessage = sanitizeInput(message, 5000);
