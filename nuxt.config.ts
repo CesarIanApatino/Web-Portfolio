@@ -3,11 +3,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   
-  ssr: false, // Add this - TresJS needs client-side rendering
+  ssr: false, // TresJS needs client-side rendering
+  
+  nitro: {
+    preset: 'static'
+  },
   
   modules: [
     '@tresjs/nuxt',
-    '@vueuse/motion/nuxt',
     '@primevue/nuxt-module'
   ],
   
