@@ -119,7 +119,7 @@
         :style="{ transform: activeItem ? 'translateX(0)' : 'translateX(100%)' }"
       >
 
-        <!-- close button — flex-shrink: 0 so it never gets squished -->
+        <!-- close button -->
         <div style="display: flex; justify-content: flex-end; padding: 1.5rem; flex-shrink: 0; border-bottom: 1px solid black;">
           <div
             @click="activeItem = null"
@@ -139,7 +139,7 @@
           </div>
         </div>
 
-        <!-- scrollable content area — this is the ONLY thing that scrolls -->
+        <!-- scrollable content area -->
         <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column;">
 
           <!-- IMAGE CAROUSEL -->
@@ -193,8 +193,7 @@
               </span>
             </div>
           </div>
-
-          <!-- text content -->
+          
           <div style="padding: 2rem;">
 
             <!-- title -->
@@ -204,6 +203,26 @@
             >
               {{ activeItem?.text }}
             </span>
+
+            <!-- Year and Role -->
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+              <div v-if="activeItem?.year" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-family: monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.5);">
+                  YEAR
+                </span>
+                <span style="font-family: monospace; font-size: 0.75rem; font-weight: bold; color: #dc2626;">
+                  {{ activeItem.year }}
+                </span>
+              </div>
+              <div v-if="activeItem?.role" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-family: monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.5);">
+                  ROLE
+                </span>
+                <span style="font-family: monospace; font-size: 0.75rem; font-weight: bold;">
+                  {{ activeItem.role }}
+                </span>
+              </div>
+            </div>
 
             <!-- stack tags -->
             <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem;">
@@ -225,20 +244,48 @@
             </div>
 
             <!-- description -->
-            <p class="font-mono text-sm text-black leading-relaxed" style="border-left: 2px solid black; padding-left: 1rem;">
+            <p class="font-mono text-sm text-black leading-relaxed" style="border-left: 2px solid black; padding-left: 1rem; margin-bottom: 2rem;">
               {{ activeItem?.description }}
             </p>
 
+            <!-- FEATURES SECTION (NEW!) -->
+            <div v-if="activeItem?.features && activeItem.features.length" style="margin-bottom: 2rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                <span style="font-family: monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">
+                  KEY FEATURES
+                </span>
+                <div style="flex: 1; height: 1px; background: rgba(0,0,0,0.2);"></div>
+              </div>
+              
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li 
+                  v-for="(feature, idx) in activeItem.features" 
+                  :key="idx"
+                  style="
+                    font-family: monospace;
+                    font-size: 0.75rem;
+                    color: rgba(0,0,0,0.8);
+                    padding-left: 1.25rem;
+                    position: relative;
+                    line-height: 1.5;
+                  "
+                >
+                  <span style="position: absolute; left: 0; color: #dc2626; font-weight: bold;">→</span>
+                  {{ feature }}
+                </li>
+              </ul>
+            </div>
+
             <!-- visit link -->
-            
-            <a :href="activeItem?.link as string"
+            <a 
+              v-if="activeItem?.link && activeItem.link !== '#'"
+              :href="activeItem.link" 
               target="_blank"
               class="visit-link"
               style="
                 display: inline-flex;
                 align-items: center;
                 gap: 0.5rem;
-                margin-top: 2rem;
                 border: 2px solid black;
                 padding: 0.75rem 1.5rem;
                 font-family: monospace;
@@ -256,6 +303,25 @@
                 <polyline points="12 5 19 12 12 19"/>
               </svg>
             </a>
+
+            <!-- Coming Soon badge if no link -->
+            <div
+              v-else
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                border: 2px solid rgba(0,0,0,0.2);
+                padding: 0.75rem 1.5rem;
+                font-family: monospace;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: rgba(0,0,0,0.4);
+              "
+            >
+              Link Coming Soon
+            </div>
 
           </div>
         </div>
@@ -326,6 +392,9 @@ interface MenuItemProps {
   images?: string[]
   image?: string
   category?: string
+  year?: string
+  role?: string
+  features?: string[]
 }
 
 const props = withDefaults(defineProps<{ items?: MenuItemProps[] }>(), {
@@ -344,7 +413,6 @@ let carouselTimer: ReturnType<typeof setInterval> | null = null
 const setItemRef = (el: HTMLDivElement | null, idx: number) => {
   if (el) itemRefs.value[idx] = el
 }
-
 
 const findClosestEdge = (mouseX: number, mouseY: number, width: number, height: number) => {
   const top = Math.pow(mouseX - width / 2, 2) + Math.pow(mouseY, 2)
@@ -384,12 +452,14 @@ const handleMouseLeave = (ev: MouseEvent, idx: number) => {
     .to(marqueeRef, { y: edge === 'top' ? '-100%' : '100%' })
     .to(marqueeInnerRef, { y: edge === 'top' ? '100%' : '-100%' }, '<')
 }
+
 const activeImages = computed<string[]>(() => {
   if (!activeItem.value) return []
   if (activeItem.value.images?.length) return activeItem.value.images
   if (activeItem.value.image) return [activeItem.value.image]
   return []
 })
+
 const stackTags = computed<string[]>(() => {
   return activeItem.value?.stack?.split(',').map(s => s.trim()).filter(Boolean) ?? []
 })
@@ -409,6 +479,7 @@ onBeforeUnmount(() => {
 })
 
 </script>
+
 <style scoped>
 /* backdrop transition */
 .backdrop-enter-active, .backdrop-leave-active { transition: opacity 0.3s ease; }

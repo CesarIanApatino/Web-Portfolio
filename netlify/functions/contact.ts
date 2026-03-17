@@ -229,7 +229,7 @@ if (timestamp) {
   try {
     const htmlMessage = `
       <div style="font-family: monospace; max-width: 600px; margin: 0 auto; border: 3px solid #FF0000; padding: 20px; background: #000; color: #fff;">
-        <h2 style="color: #FF0000; text-transform: uppercase; letter-spacing: 2px;">New Portfolio Contact</h2>
+        <h2 style="color: #FF0000; text-transform: uppercase; letter-spacing: 2px;">New Portfolio Message</h2>
         
         <div style="border: 2px solid #fff; padding: 15px; margin: 20px 0;">
           <p style="margin: 5px 0;"><strong style="color: #FF0000;">Name:</strong> ${sanitizedName}</p>
@@ -250,7 +250,7 @@ if (timestamp) {
     `;
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.MAIL_USER}>`, 
+      from: `"Message from the Portfolio" <${process.env.MAIL_USER}>`, 
       replyTo: sanitizedEmail, // Set user's email as reply-to
       to: process.env.MAIL_USER,
       subject: `[PORTFOLIO] Message from ${sanitizedName}`,

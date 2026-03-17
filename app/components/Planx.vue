@@ -7,6 +7,16 @@ import FallingText from './FallingText.vue'
 import Test from './Test.vue'
 import Masonry from './Masonry.vue'
 
+const isContactModalOpen = ref(false)
+
+const openContactModal = () => {
+  isContactModalOpen.value = true
+}
+
+const closeContactModal = () => {
+  isContactModalOpen.value = false
+}
+
 const projects = ref([
   {
     id: 1,
@@ -301,150 +311,117 @@ onMounted(() => {
         </div>
       </section>
 
-      <!-- Contact Section -->
-      <section class="contact-section">
-        <div class="contact-wrapper">
-          <!-- Header -->
-          <div class="contact-header">
-            <div class="label-box">
-              <span>CONNECT</span>
-            </div>
-            
-            <h2 class="contact-title">
-              LET'S<br/>
-              <span class="red-text">WORK</span><br/>
-              TOGETHER
-            </h2>
-          </div>
-
-          <!-- Main Grid Layout -->
-          <div class="contact-grid">
-            <!-- Left Column - Contact Info -->
-            <div class="contact-info-column">
-              <!-- Email Block -->
-              <a href="mailto:cesar.ian.apatino23@gmail.com" class="info-block red-block">
-                <div class="block-header">
-                  <span class="block-number">01</span>
-                  <span class="block-label">EMAIL</span>
-                </div>
-                <div class="block-content">
-                  cesar.ian.apatino23@gmail.com
-                </div>
-                <div class="block-arrow">→</div>
-              </a>
-
-              <!-- Location Block -->
-              <div class="info-block white-block">
-                <div class="block-header">
-                  <span class="block-number">02</span>
-                  <span class="block-label">LOCATION</span>
-                </div>
-                <div class="block-content">
-                  Butuan City, Philippines
-                </div>
-              </div>
-
-              <!-- GitHub Block -->
-              <a href="https://github.com/GameSa0" target="_blank" class="info-block red-block">
-                <div class="block-header">
-                  <span class="block-number">03</span>
-                  <span class="block-label">GITHUB</span>
-                </div>
-                <div class="block-content">
-                  github.com/GameSa0
-                </div>
-                <div class="block-arrow">→</div>
-              </a>
-
-              <!-- LinkedIn Block -->
-              <a href="https://www.linkedin.com/in/cesar-ian-apatino-b217893ab/" target="_blank" class="info-block red-block">
-                <div class="block-header">
-                  <span class="block-number">04</span>
-                  <span class="block-label">LINKEDIN</span>
-                </div>
-                <div class="block-content">
-                  linkedin.com/in/cesar-ian-apatino-b217893ab
-                </div>
-                <div class="block-arrow">→</div>
-              </a>
-
-              <!-- Download CV Block -->
-              <a href="/assets/CV/resume.pdf" download class="info-block cv-block">
-                <div class="cv-content">
-                  <span class="cv-icon">↓</span>
-                  <span class="cv-text">DOWNLOAD CV</span>
-                </div>
-              </a>
-            </div>
-            <div>
-                <ContactForm />
-            </div>
-          </div>
-          <!-- Footer -->
-          <div class="contact-footer">
-            <div class="footer-line"></div>
-            <div class="footer-content">
-              <span class="footer-item">© 2024 CESAR IAN APATINO</span>
-              <span class="footer-item">TO LAZY TO DESIGN</span>
-            </div>
-          </div>
+      <section class="fade-in-section min-h-screen py-24">
+        <div class="tes">
+        <Services />
         </div>
       </section>
+      
+        <section class="contact-section">
+          <div class="contact-container">
+            
+            <!-- Header -->
+            <div class="contact-header">
+              <div class="brutal-border label-box">
+                <span class="label-text">[ CONNECT ]</span>
+              </div>
+              
+              <h2 class="contact-title">
+                LET'S<br/>
+                <span class="text-red">WORK</span><br/>
+                TOGETHER
+              </h2>
+            </div>
 
-      <!-- Footer -->
-      <footer class="py-12 border-t-2 border-white mt-24">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="font-mono text-xs opacity-50">
-            'To Shallow to Brag'
-          </p>
-          <p class="font-mono text-xs opacity-50">
-            DESIGNED & DEVELOPED WITH ❤️
-          </p>
+            <!-- Contact Info Cards -->
+            <div class="contact-grid">
+              <a 
+                href="https://www.linkedin.com/in/cesar-ian-apatino-b217893ab/"
+                target="_blank"
+                class="contact-card red-border"
+              >
+               <span class="block-number">01</span>
+                <div class="card-label">LINKEDIN</div>
+                <div class="card-value">linkedin.com/in/cesar-ian-apatino-b217893ab</div>
+                <div class="card-arrow">→</div>
+              </a>
+
+              <div class="contact-card white-border">
+                <span class="block-number">02</span>
+                <div class="card-label">LOCATION</div>
+                <div class="card-value">Butuan City, Philippines</div>
+              </div>
+
+              <a 
+                href="https://github.com/GameSa0" 
+                target="_blank"
+                class="contact-card red-border"
+              >
+                <span class="block-number">03</span>
+                <div class="card-label">GITHUB</div>
+                <div class="card-value">github.com/GameSa0</div>
+                <div class="card-arrow">→</div>
+              </a>
+            </div>
+
+            <!-- CTA Box (moved from Services) -->
+            <div class="contact-cta-box">
+              <div class="cta-box">
+                <div class="cta-content">
+                  <span class="cta-label">READY TO START?</span>
+                  <h3 class="cta-title">LET'S BUILD SOMETHING GREAT</h3>
+                  <p class="cta-text">
+                    Get in touch to discuss your project requirements and timeline.
+                  </p>
+                </div>
+                <button @click="openContactModal" class="cta-button">
+                  <span>GET IN TOUCH</span>
+                  <span class="button-arrow">→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Download CV Button -->
+            <div class="download-cv-section">
+              <a 
+                href="/assets/CV/resume.pdf" 
+                download
+                target="_blank"
+                rel="noreferrer noopener"
+                class="download-cv-button"
+              >
+                <span class="button-icon">↓</span>
+                <span class="button-text">DOWNLOAD CV</span>
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <footer class="contact-footer">
+            <div class="footer-line"></div>
+            <div class="footer-content">
+              <span class="footer-text">© 2025 CESAR IAN APATINO</span>
+              <span class="footer-text">TO LAZY TO DESIGN</span>
+            </div>
+          </footer>
+        </section>
+
+      <!-- Contact Modal -->
+      <ContactModal :is-open="isContactModalOpen" @close="closeContactModal" />
         </div>
-      </footer>
-    </div>
-  </div>
+      </div>
 </template>
 
 <style scoped>
-.parallax-layer {
-  will-change: transform;
-}
-
-.layer-1 {
-  transform: translateZ(-1px) scale(1.1);
-}
-
-.layer-2 {
-  transform: translateZ(-0.5px) scale(1.05);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #000;
-  border-left: 2px solid #fff;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #ff0000;
-  border: 2px solid #000;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #fff;
-}
 .contact-section {
   min-height: 100vh;
   background: #000;
-  padding: 6rem 1.5rem 4rem;
+  padding: 6rem 1.5rem 0;
 }
 
-.contact-wrapper {
-  max-width: 1400px;
+.contact-container {
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -454,18 +431,16 @@ onMounted(() => {
 }
 
 .label-box {
-  border: 2px solid #fff;
   display: inline-block;
   padding: 6px 16px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
   margin-bottom: 2rem;
 }
 
-.label-box.small {
-  padding: 4px 12px;
-  font-size: 9px;
+.label-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #fff;
 }
 
 .contact-title {
@@ -473,28 +448,22 @@ onMounted(() => {
   font-size: clamp(3rem, 8vw, 6rem);
   line-height: 0.9;
   color: #fff;
+  margin: 0;
 }
 
-.red-text {
+.text-red {
   color: #FF0000;
 }
 
-/* Main Grid */
+/* Contact Grid */
 .contact-grid {
   display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 4rem;
 }
 
-/* Left Column - Info Blocks */
-.contact-info-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.info-block {
+.contact-card {
   border: 2px solid #fff;
   padding: 1.5rem;
   position: relative;
@@ -505,53 +474,36 @@ onMounted(() => {
   display: block;
 }
 
-.red-block {
-  border-color: #FF0000;
-  border-width: 3px;
+.contact-card.red-border {
+  border: 3px solid #FF0000;
 }
 
-.red-block:hover {
+.contact-card:hover.red-border {
   background: #FF0000;
   color: #000;
 }
 
-.red-block:hover .block-arrow {
-  transform: translateX(5px);
-}
-
-.white-block:hover {
+.contact-card:hover.white-border {
   background: #fff;
   color: #000;
 }
 
-.block-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
+.card-label {
   font-family: var(--font-mono);
-}
-
-.block-number {
-  font-size: 10px;
-  opacity: 0.5;
-  letter-spacing: 0.1em;
-}
-
-.block-label {
   font-size: 10px;
   letter-spacing: 0.15em;
-  opacity: 0.7;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
 }
 
-.block-content {
+.card-value {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.02em;
   line-height: 1.5;
 }
 
-.block-arrow {
+.card-arrow {
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
@@ -559,41 +511,172 @@ onMounted(() => {
   transition: transform 0.3s ease;
 }
 
-/* CV Block */
-.cv-block {
-  background: #fff;
-  color: #000;
-  border: 3px solid #fff;
-  padding: 2rem 1.5rem;
+.contact-card:hover .card-arrow {
+  transform: translateX(5px);
+}
+
+/* CTA Box (from Services) */
+.contact-cta-box {
+  margin-bottom: 2rem;
+}
+
+.cta-box {
+  border: 3px solid #FF0000;
+  padding: 3rem;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  gap: 3rem;
+  background: #000;
+  transition: background 0.3s ease;
 }
 
-.cv-block:hover {
-  background: #FF0000;
-  border-color: #FF0000;
+.cta-box:hover {
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.cta-content {
+  flex: 1;
+}
+
+.cta-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #FF0000;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   color: #fff;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.1;
 }
 
-.cv-content {
-  display: flex;
+.cta-text {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cta-button {
+  border: 2px solid #fff;
+  background: transparent;
+  padding: 1.25rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #fff;
+  display: inline-flex;
   align-items: center;
   gap: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transition: left 0.4s ease;
+  z-index: 0;
+}
+
+.cta-button:hover::before {
+  left: 0;
+}
+
+.cta-button:hover {
+  color: #000;
+  border-color: #fff;
+}
+
+.cta-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.button-arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+/* Download CV Section */
+.download-cv-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.download-cv-button {
+  border: 3px solid #fff;
+  background: transparent;
+  color: #fff;
+  padding: 1.5rem 2.5rem;
   font-family: var(--font-mono);
   font-size: 14px;
   letter-spacing: 0.15em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
 }
 
-.cv-icon {
-  font-size: 24px;
+.download-cv-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transition: left 0.4s ease;
+  z-index: 0;
+}
+
+.download-cv-button:hover::before {
+  left: 0;
+}
+
+.download-cv-button:hover {
+  color: #000;
+}
+
+.button-text,
+.button-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.button-icon {
+  font-size: 20px;
   font-weight: bold;
 }
 
-
 /* Footer */
 .contact-footer {
-  margin-top: 4rem;
+  margin-top: 6rem;
+  padding: 2rem 0;
 }
 
 .footer-line {
@@ -610,44 +693,41 @@ onMounted(() => {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
-  color: #fff;
-  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.5);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .contact-info-column {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  .cv-block {
-    grid-column: span 2;
+  .cta-box {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .contact-section {
-    padding: 4rem 1rem 2rem;
+    padding: 4rem 1rem 0;
   }
 
-  .contact-info-column {
+  .contact-grid {
     grid-template-columns: 1fr;
   }
 
-  .cv-block {
-    grid-column: span 1;
+  .cta-box {
+    padding: 2rem;
+  }
+
+  .download-cv-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .footer-content {
     flex-direction: column;
-    gap: 1rem;
     text-align: center;
   }
 }

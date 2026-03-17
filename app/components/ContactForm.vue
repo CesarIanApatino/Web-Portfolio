@@ -7,10 +7,8 @@ const contactForm = ref({
   message: ''
 })
 
-// Honeypot field – bots will fill this in, real users won't
 const botField = ref('')
 
-// Timestamp to detect too-fast submissions
 const formLoadTime = ref(Date.now())
 
 const isSubmitting = ref(false)
@@ -203,7 +201,7 @@ const handleSubmit = async () => {
           v-model="contactForm.name"
           type="text" 
           class="field-input"
-          placeholder="JOHN DOE"
+          placeholder="Your Name"
           maxlength="100"
           required
           autocomplete="name"
@@ -220,7 +218,7 @@ const handleSubmit = async () => {
           v-model="contactForm.email"
           type="email" 
           class="field-input"
-          placeholder="JOHN@EXAMPLE.COM"
+          placeholder="your.email@example.com"
           maxlength="255"
           required
           autocomplete="email"
