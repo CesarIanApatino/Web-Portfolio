@@ -384,7 +384,7 @@ onMounted(() => {
             <!-- Download CV Button -->
             <div class="download-cv-section">
               <a 
-                href="/assets/CV/resume.pdf" 
+                href="/assets/CV/Cesar_Ian_Apatino_Resume.pdf" 
                 download
                 target="_blank"
                 rel="noreferrer noopener"
