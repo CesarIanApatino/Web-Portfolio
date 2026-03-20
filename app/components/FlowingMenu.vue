@@ -251,7 +251,7 @@
             <!-- FEATURES SECTION (NEW!) -->
             <div v-if="activeItem?.features && activeItem.features.length" style="margin-bottom: 2rem;">
               <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-                <span style="font-family: monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold;">
+                <span style="font-family: monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold; color: black;">
                   KEY FEATURES
                 </span>
                 <div style="flex: 1; height: 1px; background: rgba(0,0,0,0.2);"></div>
