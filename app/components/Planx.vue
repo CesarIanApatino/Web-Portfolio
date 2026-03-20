@@ -141,81 +141,93 @@ onMounted(() => {
           </div>
 
           <!-- RIGHT: About Panel -->
-          <div class="relative bg-black text-white p-8 flex flex-col gap-6 min-h-[360px]">
-            
-            <!-- Red top-right corner dot -->
-            <div class="absolute top-0 right-0 w-4 h-4 bg-red-600" />
+        <div class="relative bg-black text-white p-8 flex flex-col gap-6 min-h-[360px]">
+          
+          <!-- Red top-right corner dot -->
+          <div class="absolute top-0 right-0 w-4 h-4 bg-red-600" />
 
-            <!-- Section label -->
-            <span class="text-[10px] font-black tracking-[0.25em] uppercase text-white/30">
-              — WHO I AM
-            </span>
+          <!-- Section label -->
+          <span class="text-[10px] font-black tracking-[0.25em] uppercase text-white/30">
+            — WHO I AM
+          </span>
 
-            <!-- Bio text -->
-            <p class="font-mono text-sm leading-relaxed text-white/75 max-w-sm">
-              Hey, I'm <span class="text-white font-black not-italic">Ian</span> — a developer passionate 
-              about building things that look great and feel effortless to use. 
-              Always learning, always building.
+          <!-- Bio text (UPDATED) -->
+          <div class="flex flex-col gap-3">
+            <p class="font-mono text-sm leading-relaxed text-white/75 max-w-md">
+              Hey, I'm <span class="text-white font-black not-italic">Ian</span> — a 
+              <span class="text-white font-black not-italic">junior developer</span> from 
+              <span class="text-white/90">Butuan City</span>, who builds fullstack 
+              web applications with <span class="text-white/90">Vue.js, Nuxt, and Laravel</span>.
+              I'm drawn to projects that challenge me: backend systems that stay reliable, 
+              3D interfaces that feel alive, and code that other developers can actually understand.
             </p>
-
-            <!-- Divider -->
-            <div class="flex items-center gap-3">
-              <div class="divider-dashed" />
-              <span>Currently Exploring</span>
-              <div class="divider-dashed" />
-            </div>
-
-            <!-- Tech Stack Grid -->
-            <div class="grid grid-cols-4 gap-3">
-
-              <!-- Laravel -->
-              <div class="group flex flex-col items-center gap-2">
-                <div class="icon-box">
-                  <Avatar image="/Icon/laravel.svg" size="large" shape="square"
-                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
-                </div>
-                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Laravel</span>
-              </div>
-
-              <!-- GSAP -->
-              <div class="group flex flex-col items-center gap-2">
-                <div class="icon-box">
-                  <Avatar image="/Icon/gsap.svg" size="large" shape="square"
-                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
-                </div>
-                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">GSAP</span>
-              </div>
-
-              <!-- Three.js -->
-              <div class="group flex flex-col items-center gap-2">
-                <div class="icon-box">
-                  <Avatar image="/Icon/Three.svg" size="large" shape="square"
-                    :style="{ width: '100%', height: '100%', objectFit: 'contain', background: 'white' }" />
-                </div>
-                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Three.js</span>
-              </div>
-
-              <!-- System Design -->
-              <div class="group flex flex-col items-center gap-2">
-                <div class="icon-box">
-                  <Avatar image="/Icon/system-design.svg" size="large" shape="square"
-                    :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
-                </div>
-                <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">System Design</span>
-              </div>
-            </div>
-
-            <!-- Bottom stat strip -->
-            <div class="border-top-muted mt-auto pt-4 flex justify-between items-center">
-              <span class="font-mono text-muted" style="font-size: 10px; letter-spacing: 0.1em;">EST. 2025</span>
-              <div class="flex gap-1">
-                <div class="dot-red" />
-                <div class="dot-muted" />
-                <div class="dot-muted" />
-              </div>
-            </div>
-
+            
+            <p class="font-mono text-xs leading-relaxed text-white/60">
+              <span class="text-red-500 font-bold">7 months in</span>, I've shipped web applications and academic 
+              research projects. Always learning, always shipping. 
+              <span class="text-white font-bold">Currently seeking full-time roles</span> where 
+              I can contribute to meaningful projects and grow as an developer/engineer.
+            </p>
           </div>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-3">
+            <div class="divider-dashed" />
+            <span class="text-[10px] font-mono tracking-wider text-white/40">Currently Enhancing</span>
+            <div class="divider-dashed" />
+          </div>
+
+          <!-- Tech Stack Grid -->
+          <div class="grid grid-cols-4 gap-3">
+
+            <!-- Laravel -->
+            <div class="group flex flex-col items-center gap-2">
+              <div class="icon-box">
+                <Avatar image="/Icon/laravel.svg" size="large" shape="square"
+                  :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+              </div>
+              <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Laravel</span>
+            </div>
+
+            <!-- GSAP -->
+            <div class="group flex flex-col items-center gap-2">
+              <div class="icon-box">
+                <Avatar image="/Icon/gsap.svg" size="large" shape="square"
+                  :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+              </div>
+              <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">GSAP</span>
+            </div>
+
+            <!-- Three.js -->
+            <div class="group flex flex-col items-center gap-2">
+              <div class="icon-box">
+                <Avatar image="/Icon/Three.svg" size="large" shape="square"
+                  :style="{ width: '100%', height: '100%', objectFit: 'contain', background: 'white' }" />
+              </div>
+              <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">Three.js</span>
+            </div>
+
+            <!-- System Design -->
+            <div class="group flex flex-col items-center gap-2">
+              <div class="icon-box">
+                <Avatar image="/Icon/system-design.svg" size="large" shape="square"
+                  :style="{ width: '100%', height: '100%', objectFit: 'contain' }" />
+              </div>
+              <span class="text-muted-40" style="font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 900;">System Design</span>
+            </div>
+          </div>
+
+          <!-- Bottom stat strip -->
+          <div class="border-top-muted mt-auto pt-4 flex justify-between items-center">
+            <span class="font-mono text-muted" style="font-size: 10px; letter-spacing: 0.1em;">EST. 2025</span>
+            <div class="flex gap-1">
+              <div class="dot-red" />
+              <div class="dot-muted" />
+              <div class="dot-muted" />
+            </div>
+          </div>
+
+        </div>
         </div>
         </div>
       </section>
