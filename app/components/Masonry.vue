@@ -3,46 +3,31 @@
     <div class="section-label">[ CAPABILITIES ]</div>
     <h2 class="section-title">SKILLS</h2>
 
-    <!-- Asymmetric grid -->
+    <div class="skill-category-label">— CORE STACK</div>
     <div class="skills-grid">
-      <div class="skill-box large hover-red">
-        <span class="skill-name">TYPESCRIPT</span>
-      </div>
-      <div class="skill-box large hover-red">
-        <span class="skill-name">VUE.JS</span>
-      </div>
-      <div class="skill-box large hover-red">
-        <span class="skill-name">NUXT</span>
-      </div>
-      <div class="skill-box large hover-red">
-        <span class="skill-name">LARAVEL</span>
-      </div>
-      
-      <div class="skill-box medium hover-invert">THREE.JS</div>
-      <div class="skill-box medium hover-invert">GSAP</div>
-      <div class="skill-box medium hover-invert">NODE.JS</div>
-      
-      <div class="skill-box small hover-invert">PYTHON</div>
-      <div class="skill-box small hover-invert">DESIGN</div>
-      <div class="skill-box small hover-invert">UI/UX</div>
-      <div class="skill-box small hover-invert">PHP</div>
-      <div class="skill-box small hover-invert">JAVA</div>
+      <div class="skill-box large hover-red">TYPESCRIPT</div>
+      <div class="skill-box large hover-red">VUE.JS</div>
+      <div class="skill-box large hover-red">NUXT</div>
+      <div class="skill-box large hover-red">LARAVEL</div>
     </div>
 
-    <!-- Stats with better spacing -->
-    <div class="stats-grid">
-      <div class="stat-box red-border">
-        <div class="stat-number">3</div>
-        <div class="stat-label">PROJECTS</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">7</div>
-        <div class="stat-label">MONTHS EXP</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">∞</div>
-        <div class="stat-label">CREATIVITY</div>
-      </div>
+    <!-- Frontend -->
+    <div class="skill-category-label">— FRONTEND</div>
+    <div class="skills-grid">
+      <div class="skill-box medium hover-invert">THREE.JS</div>
+      <div class="skill-box medium hover-invert">GSAP</div>
+      <div class="skill-box medium hover-invert">UI/UX</div>
+      <div class="skill-box medium hover-invert">DESIGN</div>
+    </div>
+
+    <!-- Backend & DB -->
+    <div class="skill-category-label">— BACKEND & DB</div>
+    <div class="skills-grid">
+      <div class="skill-box medium hover-invert">PHP</div>
+      <div class="skill-box medium hover-invert">NODE.JS</div>
+      <div class="skill-box medium hover-invert">POSTGRESQL</div>
+      <div class="skill-box medium hover-invert">MYSQL</div>
+      <div class="skill-box medium hover-invert">PYTHON</div>
     </div>
   </section>
 </template>
@@ -179,6 +164,15 @@
   font-size: 10px;
   letter-spacing: 0.15em;
   opacity: 0.7;
+}
+
+.skill-category-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #FF0000;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
 }
 
 /* Responsive */

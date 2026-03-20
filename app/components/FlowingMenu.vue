@@ -218,7 +218,7 @@
                 <span style="font-family: monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.5);">
                   ROLE
                 </span>
-                <span style="font-family: monospace; font-size: 0.75rem; font-weight: bold;">
+                <span style="font-family: monospace; font-size: 0.75rem; font-weight: bold; color: black;">
                   {{ activeItem.role }}
                 </span>
               </div>
@@ -320,7 +320,7 @@
                 color: rgba(0,0,0,0.4);
               "
             >
-              Link Coming Soon
+              Private Repository — available upon request
             </div>
 
           </div>

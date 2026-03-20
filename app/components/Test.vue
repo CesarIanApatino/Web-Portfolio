@@ -93,7 +93,7 @@ const items = [
     role: 'Solo Developer (Thesis)'
   },
   {
-    link: 'https://github.com/GameSa0/StaticProject',
+    link: '#',
     text: 'React Practice Project',
     category: 'EXPERIMENTAL',
     description: 'A personal project built with React to practice and explore frontend development concepts, featuring a simple user interface and interactive components.',

@@ -284,6 +284,10 @@ onUnmounted(() => {
             </p>
           </div>
         </div>
+        <div class="availability-badge">
+          <span class="dot"></span>
+          <span class="availability-text">OPEN TO FULL-TIME OPPORTUNITIES</span>
+        </div>
       </div>
     </div>
     <div class="absolute bottom-8 w-full flex justify-center">
@@ -322,18 +326,42 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-h1 {
-  text-shadow: 3px 3px 0 rgba(255, 0, 0, 0.3);
-}
-
-p{
-  font-size: 20px;
-  color: white;
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 3rem;
+  .availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    margin-top: 1rem;
   }
-}
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #00FF00;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  h1 {
+    text-shadow: 3px 3px 0 rgba(255, 0, 0, 0.3);
+  }
+
+  p{
+    font-size: 20px;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 3rem;
+    }
+  }
 </style>

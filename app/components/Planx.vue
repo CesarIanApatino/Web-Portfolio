@@ -17,47 +17,6 @@ const closeContactModal = () => {
   isContactModalOpen.value = false
 }
 
-const projects = ref([
-  {
-    id: 1,
-    title: 'Funds Recorder',
-    category: 'GUI',
-    description: 'A Simple GUI Fund Records System with a CRUD Function with No Databse use. By using File Handling and Text Manipulation',
-    year: '2025',
-    tags: ['Java'],
-    demoUrl: 'https://github.com/username/project1',
-    codeUrl: 'https://github.com/username/project1',
-    images: ['/Icon/Laravel.png', '/Icon/Three.png', '/Icon/gsap.png', '/Icon/monitor_958857.png', '/Icon/system-design.svg']
-  },
-  {
-    id: 2,
-    title: 'Web-Based Faculty Evaluation with Sentiment Analysis',
-    category: 'Web App',
-    description: 'An AI Faculty Evaluation with Sentiment Analysis is a Institution Evaluation System with Sentiment Analysis that Identify the feedback of students if its Positive, Negative or Neutral and separate them categoricaly.',
-    year: '2025',
-    tags: ['Python', 'Google Colab', 'Flask'],
-    demoUrl: 'https://example.com/demo2',
-    codeUrl: 'https://github.com/username/project2'
-  },
-  {
-    id: 3,
-    title: 'Tourist Spot',
-    category: 'Mobile App',
-    description: 'User-friendly mobile app designed to help travelers discover and explore tourist spots, featuring intuitive navigation, hotspot recommendations, and bookmarking functionality.',
-    year: '2025',
-    tags: ['Flutter', 'Firebase', 'Openstreetmap'],
-    demoUrl: 'https://example.com/demo3',
-    codeUrl: 'https://github.com/username/project3'
-  }
-])
-
-const skills = ref([
- 'TYPESCRIPT', 'VUE.JS', 'NUXT',
-  'THREE.JS', 'GSAP', 'NODE.JS',
-  'PYTHON', 'DESIGN', 'UI/UX', 'LARAVEL',
-  'PHP','JAVA'
-])
-
 const experience = ref<Experience[]>([
   // — TECH —
   {
@@ -65,11 +24,13 @@ const experience = ref<Experience[]>([
     type: 'tech' as const,
     company: 'Engtech Global Solution Inc.',
     position: 'Junior Fullstack Developer',
-    period: '2025 - PRESENT',
+    period: 'AUGUST 2025 - FEBRUARY 2026',
     description: 'Full-stack development of enterprise ERP systems, delivering 4–5 tasks weekly across the Accounting module.',
     achievements: [
-      'Rapidly adapted to a complex legacy codebase and contributed meaningfully within the first month',
+      'Delivered fullstack tasks weekly on a live ERP accounting system built with Laravel + Nuxt',
       'Contributed to technical discussions, identifying edge cases and proposing practical solutions',
+      'Collaborated with senior developers to implement features and fix bugs, gaining hands-on experience in a production environment',
+      'Maintained code quality and consistency by following established coding standards and best practices'
     ],
     images: [
     ]
@@ -80,7 +41,7 @@ const experience = ref<Experience[]>([
     type: 'other' as const,
     company: 'Self-Employed',
     position: 'Carpenter / Construction Helper',
-    period: '2022 - 2023',
+    period: '2020 - 2021',
     description: 'Hands-on construction and carpentry work. Built discipline, attention to detail, and the ability to work under physical and time pressure.',
     achievements: [],
   },
@@ -89,7 +50,7 @@ const experience = ref<Experience[]>([
     type: 'other' as const,
     company: 'Various Clients',
     position: 'Data Encoder',
-    period: '2023 - 2024',
+    period: 'MARCH 2022 - APRIL 2022',
     description: 'Encoded and organized large volumes of data with high accuracy. Strengthened focus, consistency, and data handling skills.',
     achievements: [],
   },
@@ -310,12 +271,6 @@ onMounted(() => {
         <Masonry />
         </div>
       </section>
-
-      <section class="fade-in-section min-h-screen py-24">
-        <div class="tes">
-        <Services />
-        </div>
-      </section>
       
         <section class="contact-section">
           <div class="contact-container">
@@ -336,13 +291,13 @@ onMounted(() => {
             <!-- Contact Info Cards -->
             <div class="contact-grid">
               <a 
-                href="https://www.linkedin.com/in/cesar-ian-apatino-b217893ab/"
+                href="https://www.linkedin.com/in/cesar-ian-apatino"
                 target="_blank"
                 class="contact-card red-border"
               >
                <span class="block-number">01</span>
                 <div class="card-label">LINKEDIN</div>
-                <div class="card-value">linkedin.com/in/cesar-ian-apatino-b217893ab</div>
+                <div class="card-value">linkedin.com/in/cesar-ian-apatino</div>
                 <div class="card-arrow">→</div>
               </a>
 
@@ -353,13 +308,13 @@ onMounted(() => {
               </div>
 
               <a 
-                href="https://github.com/GameSa0" 
+                href="https://github.com/CesarIanApatino" 
                 target="_blank"
                 class="contact-card red-border"
               >
                 <span class="block-number">03</span>
                 <div class="card-label">GITHUB</div>
-                <div class="card-value">github.com/GameSa0</div>
+                <div class="card-value">github.com/CesarIanApatino</div>
                 <div class="card-arrow">→</div>
               </a>
             </div>
