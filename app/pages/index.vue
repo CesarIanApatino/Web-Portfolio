@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  const { initScroll, setupParallax, destroy } = useScrollAnimation()
+  const { initScroll, destroy } = useScrollAnimation()
   const showContent = ref(false)
 
   const handleLoaderComplete = () => {
@@ -8,7 +8,6 @@
 
   onMounted(() => {
     initScroll()
-    setTimeout(() => setupParallax(), 100)
   })
 
   onUnmounted(() => {

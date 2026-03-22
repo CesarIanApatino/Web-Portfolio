@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import SectionsAbout      from '~/components/sections/About.vue'
-import SectionsProject    from '~/components/sections/Project.vue'
-import SectionsExperience from '~/components/sections/Experience.vue'
-import SectionsSkill      from '~/components/sections/Skill.vue'
-import SectionsContact    from '~/components/sections/Contact.vue'
-import SectionDivider     from '~/components/layout/SectionDivider.vue'
+  import SectionsAbout      from '~/components/sections/About.vue'
+  import SectionsProject    from '~/components/sections/Project.vue'
+  import SectionsExperience from '~/components/sections/Experience.vue'
+  import SectionsSkill      from '~/components/sections/Skill.vue'
+  import SectionsContact    from '~/components/sections/Contact.vue'
+  import SectionDivider     from '~/components/layout/SectionDivider.vue'
 
-onMounted(() => {
-  document.querySelectorAll('.planx__section').forEach(s => {
-    s.classList.add('is-visible')
+  const { setupParallax, setupScrollReveal } = useScrollAnimation()
+
+  onMounted(() => {
+    setTimeout(() => {
+      setupScrollReveal()
+      setupParallax()
+    }, 100)
   })
-})
 </script>
 
 <template>
   <div class="planx">
 
-    <!-- Fixed background layer -->
     <div class="planx__bg" aria-hidden="true">
       <div class="planx__scanlines" />
-      <p class="planx__watermark font-display">PORTFOLIO</p>
-      <div class="deco-box deco-box--white deco-box--tl" />
-      <div class="deco-box deco-box--red   deco-box--br" />
-      <div class="deco-box deco-box--white deco-box--tr" />
-      <div class="deco-box deco-box--red   deco-box--bl" />
+      <p class="planx__watermark font-display parallax-down">PORTFOLIO</p>
+      <div class="deco-box deco-box--white deco-box--tl parallax-slow" />
+      <div class="deco-box deco-box--red   deco-box--br parallax-fast" />
+      <div class="deco-box deco-box--white deco-box--tr parallax-fast" />
+      <div class="deco-box deco-box--red   deco-box--bl parallax-slow" />
     </div>
 
     <!-- Scrollable content -->
@@ -69,6 +71,7 @@ onMounted(() => {
     overflow-x: hidden;
   }
 
+  /* ── Background layer ── */
   .planx__bg {
     position: absolute;
     inset: 0;
@@ -104,19 +107,19 @@ onMounted(() => {
     pointer-events: none;
   }
 
-  /* Decorative boxes */
+  /* ── Decorative boxes ── */
   .deco-box {
     position: absolute;
     opacity: 0.07;
   }
   .deco-box--white { border: 2px solid white; }
   .deco-box--red   { border: 2px solid #dc2626; }
-  .deco-box--tl { top: 15%; left: 5%;    width: 180px; height: 180px; }
-  .deco-box--br { bottom: 12%; right: 6%; width: 120px; height: 120px; transform: rotate(45deg); }
-  .deco-box--tr { top: 40%; right: 3%;   width: 80px;  height: 80px; }
-  .deco-box--bl { bottom: 35%; left: 3%; width: 60px;  height: 60px;  transform: rotate(45deg); }
+  .deco-box--tl { top: 15%;    left: 5%;   width: 180px; height: 180px; }
+  .deco-box--br { bottom: 12%; right: 6%;  width: 120px; height: 120px; transform: rotate(45deg); }
+  .deco-box--tr { top: 40%;    right: 3%;  width: 80px;  height: 80px; }
+  .deco-box--bl { bottom: 35%; left: 3%;   width: 60px;  height: 60px;  transform: rotate(45deg); }
 
-  /* Content sits above bg */
+  /* ── Content ── */
   .planx__content {
     position: relative;
     z-index: 10;
@@ -128,14 +131,6 @@ onMounted(() => {
   .planx__section {
     min-height: 100vh;
     padding: 6rem 0;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .planx__section.is-visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .planx__section--contact {
@@ -143,6 +138,7 @@ onMounted(() => {
     min-height: unset;
   }
 
+  /* ── Responsive ── */
   @media (max-width: 768px) {
     .planx__content   { padding: 0 1rem; }
     .planx__section   { padding: 4rem 0; }
