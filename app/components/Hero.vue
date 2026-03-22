@@ -1,89 +1,83 @@
 <script setup lang="ts">
-import { TresCanvas } from '@tresjs/core'
-import { OrbitControls } from '@tresjs/cientos'
-import { ref, shallowRef, onMounted, onUnmounted, computed } from 'vue'
-import { use3DAnimation } from '~/composables/Use3danimation'
+  import { TresCanvas } from '@tresjs/core'
+  import { OrbitControls } from '@tresjs/cientos'
+  import { use3DAnimation } from '~/composables/Use3danimation'
 
-const gl = shallowRef()
-const scrollProgress = ref(0)
-const torusRef = shallowRef()
-const { animateShapes, animateOnScroll } = use3DAnimation()
+  const { cornerLabels, shapes } = useHero()
+  const { animateShapes } = use3DAnimation()
 
-const baseCameraPosition = ref<[number, number, number]>([7, 10, 10])
-const cameraDistance = 13
-const mouseX = ref(0)
-const mouseY = ref(0)
-const isMouseDown = ref(false)
+  const gl          = shallowRef()
+  const torusRef    = shallowRef()
+  const scrollProgress = ref(0)
 
-const cameraPosition = computed(() => baseCameraPosition.value)
+  const CAMERA_DISTANCE = 13
+  const mouseX     = ref(0)
+  const mouseY     = ref(0)
+  const isMouseDown = ref(false)
+  const baseCameraPosition = ref<[number, number, number]>([7, 10, 10])
+  const cameraPosition = computed(() => baseCameraPosition.value)
 
-const handleScroll = () => {
-  const heroSection = document.querySelector('.hero-3d')
-  if (heroSection) {
-    const rect = heroSection.getBoundingClientRect()
-    const progress = Math.max(0, Math.min(1, -rect.top / rect.height))
-    scrollProgress.value = progress
+  const handleScroll = () => {
+    const hero = document.querySelector('.hero-3d')
+    if (!hero) return
+    const rect = hero.getBoundingClientRect()
+    scrollProgress.value = Math.max(0, Math.min(1, -rect.top / rect.height))
   }
-}
 
-const handleMouseMove = (event: MouseEvent) => {
-  if (!isMouseDown.value) return
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isMouseDown.value) return
+    const hero = document.querySelector('.hero-3d')
+    if (!hero) return
+    const rect = hero.getBoundingClientRect()
 
-  const heroSection = document.querySelector('.hero-3d')
-  if (!heroSection) return
+    mouseX.value = ((e.clientX - rect.left) / rect.width) * 2 - 1
+    mouseY.value = ((e.clientY - rect.top)  / rect.height) * 2 - 1
 
-  const rect = heroSection.getBoundingClientRect()
-  
-  mouseX.value = ((event.clientX - rect.left) / rect.width) * 2 - 1
-  mouseY.value = ((event.clientY - rect.top) / rect.height) * 2 - 1
+    const phi   = Math.atan2(mouseX.value, 1) * 2.0
+    const theta = Math.acos(Math.max(-1, Math.min(1, -mouseY.value))) * 2.0
 
-  const phi = Math.atan2(mouseX.value, 1) * 2.0
-  const theta = Math.acos(Math.max(-1, Math.min(1, -mouseY.value))) * 2.0
-
-  const newX = cameraDistance * Math.sin(theta) * Math.sin(phi)
-  const newY = cameraDistance * Math.cos(theta)
-  const newZ = cameraDistance * Math.sin(theta) * Math.cos(phi)
-
-  baseCameraPosition.value = [newX, newY, newZ]
-}
-
-const handleMouseDown = () => {
-  isMouseDown.value = true
-}
-
-const handleMouseUp = () => {
-  isMouseDown.value = false
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mousedown', handleMouseDown)
-  document.addEventListener('mouseup', handleMouseUp)
-  
-  if (torusRef.value) {
-    animateShapes([torusRef.value])
+    baseCameraPosition.value = [
+      CAMERA_DISTANCE * Math.sin(theta) * Math.sin(phi),
+      CAMERA_DISTANCE * Math.cos(theta),
+      CAMERA_DISTANCE * Math.sin(theta) * Math.cos(phi),
+    ]
   }
-})
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-  document.removeEventListener('mousemove', handleMouseMove)
-  document.removeEventListener('mousedown', handleMouseDown)
-  document.removeEventListener('mouseup', handleMouseUp)
-})
+  const handleMouseDown = () => { isMouseDown.value = true }
+  const handleMouseUp   = () => { isMouseDown.value = false }
+
+  onMounted(() => {
+    window.addEventListener('scroll',    handleScroll)
+    document.addEventListener('mousemove',  handleMouseMove)
+    document.addEventListener('mousedown',  handleMouseDown)
+    document.addEventListener('mouseup',    handleMouseUp)
+    if (torusRef.value) animateShapes([torusRef.value])
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll',    handleScroll)
+    document.removeEventListener('mousemove',  handleMouseMove)
+    document.removeEventListener('mousedown',  handleMouseDown)
+    document.removeEventListener('mouseup',    handleMouseUp)
+  })
+
+  const fadeStyle = computed(() => ({ opacity: 1 - scrollProgress.value }))
+  const cornerFadeStyle = computed(() => ({
+    opacity: (1 - scrollProgress.value) * 0.5
+  }))
 </script>
 
 <template>
-  <div class="hero-3d fixed inset-0 w-full h-screen z-0">
-    <div class="scan-line"></div>
-    <div class="absolute inset-0 grid-overlay"></div>
+  <div class="hero-3d">
+    <div class="hero__scanline" />
+    <div class="hero__grid" />
+
     <TresCanvas
       ref="gl"
       clear-color="#000000"
       :alpha="false"
       :antialias="true"
-      :style="{ opacity: 1 - scrollProgress }"
+      :style="fadeStyle"
     >
       <TresPerspectiveCamera
         :position="cameraPosition"
@@ -93,275 +87,264 @@ onUnmounted(() => {
         :far="1000"
       />
 
-      <TresAmbientLight :intensity="0.3" />
-      <TresDirectionalLight
-        :position="[5, 5, 5]"
-        :intensity="0.8"
-        color="#ffffff"
-      />
-      <TresDirectionalLight
-        :position="[-5, -5, 5]"
-        :intensity="0.4"
-        color="#ff0000"
-      />
+      <TresAmbientLight     :intensity="0.3" />
+      <TresDirectionalLight :position="[5, 5, 5]"   :intensity="0.8" color="#ffffff" />
+      <TresDirectionalLight :position="[-5, -5, 5]" :intensity="0.4" color="#ff0000" />
 
-      <!-- Left Box: Large white wireframe cube at origin [0,0,0] -->
-      <TresMesh :position="[-8, -1, 2]" :rotation="[0.5, 0.5, 0]">
-        <TresBoxGeometry :args="[2, 2, 2]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-          :wireframeLinewidth="2"
-        />
-      </TresMesh>
+      <template v-for="(shape, i) in shapes" :key="i">
+        <TresMesh
+          :ref="shape.isTorus ? (el: any) => { torusRef = el } : undefined"
+          :position="shape.position as [number, number, number]"
+          :rotation="shape.rotation as [number, number, number]"
+        >
+          <!-- Box: width, height, depth -->
+          <TresBoxGeometry
+            v-if="shape.type === 'box'"
+            :args="shape.args as [number, number, number]"
+          />
 
-      <!-- Right Icosahedron: White wireframe icosahedron at [3,2,-1] -->
-      <TresMesh :position="[6, 3, -2]" :rotation="[0, 0, 0]">
-        <TresIcosahedronGeometry :args="[0.8, 0]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Icosahedron: radius, detail -->
+          <TresIcosahedronGeometry
+            v-if="shape.type === 'icosahedron'"
+            :args="shape.args as [number, number]"
+          />
 
-      <!-- Center Torus: Red wireframe torus at [-3,0,0] -->
-      <TresMesh ref="torusRef" :position="[0, 0, 0]" :rotation="[Math.PI/2, 0, 0]">
-        <TresTorusGeometry :args="[2, 0.7, 8, 16]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Torus: radius, tube, radialSeg, tubularSeg -->
+          <TresTorusGeometry
+            v-if="shape.type === 'torus'"
+            :args="shape.args as [number, number, number, number]"
+          />
 
-      <!-- Bottom-Left Box: Small white wireframe cube at [-2,-2,1] -->
-      <TresMesh :position="[-3, -4, 1]" :rotation="[0.3, 0.3, 0.3]">
-        <TresBoxGeometry :args="[1, 1, 1]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Octahedron: radius -->
+          <TresOctahedronGeometry
+            v-if="shape.type === 'octahedron'"
+            :args="shape.args as [number]"
+          />
 
-      <!-- Top-Left Octahedron: White wireframe octahedron at [-1,3,-2] -->
-      <TresMesh :position="[-2, 4, -3]" :rotation="[0, 0.4, 0]">
-        <TresOctahedronGeometry :args="[0.7]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Cone: radius, height, segments -->
+          <TresConeGeometry
+            v-if="shape.type === 'cone'"
+            :args="shape.args as [number, number, number]"
+          />
 
-      <!-- Right-Bottom Cone: Red wireframe cone at [2.5,-1.5,0] -->
-      <TresMesh :position="[4, -3, 1]" :rotation="[0.2, 0, 0]">
-        <TresConeGeometry :args="[0.6, 1.5, 4]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Sphere: radius, widthSeg, heightSeg -->
+          <TresSphereGeometry
+            v-if="shape.type === 'sphere'"
+            :args="shape.args as [number, number, number]"
+          />
 
-      <!-- Far-Right Torus: Small white wireframe torus at [4,-0.5,-3] -->
-      <TresMesh :position="[5, 1, -4]" :rotation="[1, 0, 0.5]">
-        <TresTorusGeometry :args="[0.5, 0.15, 6, 12]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Dodecahedron: radius -->
+          <TresDodecahedronGeometry
+            v-if="shape.type === 'dodecahedron'"
+            :args="shape.args as [number]"
+          />
 
-      <!-- Random Sphere: Red wireframe sphere at [2, 3, 2] -->
-      <TresMesh :position="[3, 5, 3]" :rotation="[0.4, 0.6, 0.2]">
-        <TresSphereGeometry :args="[0.9, 8, 8]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Tetrahedron: radius -->
+          <TresTetrahedronGeometry
+            v-if="shape.type === 'tetrahedron'"
+            :args="shape.args as [number]"
+          />
 
-      <!-- Random Dodecahedron: White wireframe at [-4, 2, 3] -->
-      <TresMesh :position="[-6, 3, 4]" :rotation="[0.3, 0.5, 0.7]">
-        <TresDodecahedronGeometry :args="[0.6]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <!-- Cylinder: radiusTop, radiusBottom, height, segments -->
+          <TresCylinderGeometry
+            v-if="shape.type === 'cylinder'"
+            :args="shape.args as [number, number, number, number]"
+          />
 
-      <!-- Random Tetrahedron: Red wireframe at [1, -3, -2] -->
-      <TresMesh :position="[2, -5, -3]" :rotation="[0.2, 0.8, 0.4]">
-        <TresTetrahedronGeometry :args="[0.7]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Random Cylinder: White wireframe at [-2, 1, 4] -->
-      <TresMesh :position="[-3, 2, 5]" :rotation="[0.5, 0.2, 0.3]">
-        <TresCylinderGeometry :args="[0.5, 0.5, 1.2, 8]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Random Pyramid: Red wireframe at [5, 1, -1] -->
-      <TresMesh :position="[6, 2, -2]" :rotation="[0.1, 0.3, 0.6]">
-        <TresPlaneGeometry :args="[1, 1, 4, 4]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Random Icosahedron: White wireframe at [-3, -2, 2] -->
-      <TresMesh :position="[-4, -3, 3]" :rotation="[0.7, 0.4, 0.5]">
-        <TresIcosahedronGeometry :args="[0.75, 1]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Additional Sphere: Red wireframe at [1, 4, -4] -->
-      <TresMesh :position="[1, 5, -5]" :rotation="[0.6, 0.3, 0.4]">
-        <TresSphereGeometry :args="[0.8, 8, 8]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Additional Octahedron: White wireframe at [-5, -3, -3] -->
-      <TresMesh :position="[-7, -4, -4]" :rotation="[0.5, 0.6, 0.3]">
-        <TresOctahedronGeometry :args="[0.65]" />
-        <TresMeshBasicMaterial
-          color="#ffffff"
-          :wireframe="true"
-        />
-      </TresMesh>
-
-      <!-- Additional Cone: Red wireframe at [4, 4, 2] -->
-      <TresMesh :position="[5, 4, 3]" :rotation="[0.4, 0.2, 0.5]">
-        <TresConeGeometry :args="[0.55, 1.3, 5]" />
-        <TresMeshBasicMaterial
-          color="#ff0000"
-          :wireframe="true"
-        />
-      </TresMesh>
+          <TresMeshBasicMaterial :color="shape.color" :wireframe="true" />
+        </TresMesh>
+      </template>
 
       <OrbitControls
-        :enableZoom="false"
-        :enablePan="false"
-        :autoRotate="true"
-        :autoRotateSpeed="0.7"
-        :enableDamping="true"
-        :dampingFactor="0.05"
+        :enable-zoom="false"
+        :enable-pan="false"
+        :auto-rotate="true"
+        :auto-rotate-speed="0.7"
+        :enable-damping="true"
+        :damping-factor="0.05"
       />
     </TresCanvas>
 
-    <!-- Overlay Content -->
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-      <div class="text-center space-y-8" :style="{ opacity: 1 - scrollProgress }">
-        <!-- Main Title -->
-        <h1 
-          class="font-display text-8xl md:text-9xl tracking-tight leading-none"
-          data-text="Cesar Ian C. Apatino"
-        >
-          <TextType 
+    <div class="hero__overlay" :style="fadeStyle">
+      <div class="hero__center">
+
+        <h1 class="hero__title font-display">
+          <TextType
             :text="['Cesar Ian C. Apatino']"
-            :typingSpeed="75"
-            :pauseDuration="1500"
-            :showCursor="true"
-            cursorCharacter="|"
+            :typing-speed="75"
+            :pause-duration="1500"
+            :show-cursor="true"
+            cursor-character="|"
           />
         </h1>
-        <!-- Subtitle -->
-        <div class="space-y-3">
+
+        <div class="hero__subtitle">
           <div class="brutal-border-red inline-block px-6 py-3">
-            <p class="font-mono font-bold text-lg md:text-xl tracking-widest" style="text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.94);">
-              FULLSTACK DEVELOPER
-            </p>
+            <p class="hero__role font-mono">FULLSTACK DEVELOPER</p>
           </div>
         </div>
-        <div class="availability-badge">
-          <span class="dot"></span>
-          <span class="availability-text">OPEN TO FULL-TIME OPPORTUNITIES</span>
+
+        <div class="hero__badge">
+          <span class="hero__badge-dot" />
+          <span class="hero__badge-text font-mono">OPEN TO FULL-TIME OPPORTUNITIES</span>
         </div>
+
       </div>
     </div>
-    <div class="absolute bottom-8 w-full flex justify-center">
-      <div class="mt-16 animate-bounce flex flex-col items-center">
-        <div class="p-3">
-          <svg 
-            class="w-6 h-6" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              stroke-linecap="square" 
-              stroke-linejoin="miter" 
-              stroke-width="3" 
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </div>
+
+    <div class="hero__scroll-indicator">
+      <div class="animate-bounce">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="square"
+            stroke-linejoin="miter"
+            stroke-width="3"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
       </div>
     </div>
-    
-    <div class="absolute top-8 left-8 font-mono text-xs tracking-widest" :style="{ opacity: (1 - scrollProgress) * 0.5 }">
-      <p>[ 001 ]</p>
+
+    <div
+      v-for="label in cornerLabels"
+      :key="label.position"
+      class="hero__corner"
+      :class="`hero__corner--${label.position}`"
+      :style="cornerFadeStyle"
+    >
+      <p class="font-mono">{{ label.text }}</p>
     </div>
-    <div class="absolute top-8 right-8 font-mono text-xs tracking-widest" :style="{ opacity: (1 - scrollProgress) * 0.5 }">
-      <p>[ 2025 ]</p>
-    </div>
-    <div class="absolute bottom-8 left-8 font-mono text-xs tracking-widest" :style="{ opacity: (1 - scrollProgress) * 0.5 }">
-      <p>[ LAT: 8.947890° ]</p>
-    </div>
-    <div class="absolute bottom-8 right-8 font-mono text-xs tracking-widest" :style="{ opacity: (1 - scrollProgress) * 0.5 }">
-      <p>[ LONG: 125.532333° ]</p>
-    </div>
+
   </div>
 </template>
 
 <style scoped>
-  .availability-badge {
+  .hero-3d {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+  }
+
+  /* Overlays */
+  .hero__scanline {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
+  }
+
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Center content */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .hero__center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .hero__title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-shadow: 3px 3px 0 rgba(255, 0, 0, 0.3);
+  }
+
+  .hero__role {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.94);
+  }
+
+  /* Badge */
+  .hero__badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 6px 14px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    margin-top: 1rem;
   }
 
-  .dot {
+  .hero__badge-dot {
     width: 8px;
     height: 8px;
-    background: #00FF00;
+    background: #00ff00;
     border-radius: 50%;
     animation: pulse 2s infinite;
+    flex-shrink: 0;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-  h1 {
-    text-shadow: 3px 3px 0 rgba(255, 0, 0, 0.3);
-  }
-
-  p{
-    font-size: 20px;
+  .hero__badge-text {
+    font-size: 10px;
+    letter-spacing: 0.15em;
     color: white;
   }
 
+  /* Scroll indicator */
+  .hero__scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    color: white;
+  }
+
+  /* Corner labels */
+  .hero__corner {
+    position: absolute;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: white;
+    z-index: 10;
+  }
+
+  .hero__corner p { font-size: 0.75rem; color: white; }
+
+  .hero__corner--tl { top: 2rem;    left: 2rem; }
+  .hero__corner--tr { top: 2rem;    right: 2rem; }
+  .hero__corner--bl { bottom: 2rem; left: 2rem; }
+  .hero__corner--br { bottom: 2rem; right: 2rem; }
+
+  /* Animations */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
   @media (max-width: 768px) {
-    h1 {
-      font-size: 3rem;
-    }
+    .hero__title { font-size: 3rem; }
   }
 </style>

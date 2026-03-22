@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, watch, nextTick, useTemplateRef } from 'vu
 import Matter from 'matter-js'
 import gsap from 'gsap'
 
-interface FallingTextProps {
+interface AnimationFallingTextProps {
   text?: string
   highlightWords?: string[]
   trigger?: 'auto' | 'scroll' | 'click' | 'hover'
@@ -14,7 +14,7 @@ interface FallingTextProps {
   fontSize?: string
 }
 
-const props = withDefaults(defineProps<FallingTextProps>(), {
+const props = withDefaults(defineProps<AnimationFallingTextProps>(), {
   text: '',
   highlightWords: () => [],
   trigger: 'auto',
