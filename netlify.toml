@@ -5,3 +5,7 @@
 
 [dev]
   functions = "netlify/functions"
+
+[[edge_functions]]
+  path = "/.netlify/functions/ai-assistant"
+  rate_limit = { window_limit = 10, window_size = 60, action = "block" }

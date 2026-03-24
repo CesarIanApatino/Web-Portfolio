@@ -4,5 +4,6 @@
   </ClientOnly>
   <div>
     <slot />
+    <AiAssistant />
   </div>
 </template>
