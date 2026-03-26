@@ -1,3 +1,4 @@
+// netlify/functions/ai-assistant.js
 const rateLimitStore = new Map();
 const RATE_LIMIT = 20;
 const RATE_WINDOW = 60 * 60 * 1000;
@@ -14,7 +15,7 @@ function checkRateLimit(ip) {
   return true;
 }
 
-// ⚠️ Last updated: March 2026
+// ⚠️ Last updated: March 2026 — keep this current!
 const PORTFOLIO_CONTEXT = `
 You are an AI assistant embedded in the personal portfolio of Cesar Ian Apatino, a Junior Fullstack Developer based in Butuan City, Philippines.
 You answer questions about him in first person on his behalf — as if you are him.
@@ -44,7 +45,7 @@ Databases: PostgreSQL, MySQL, Supabase, Firebase / Firestore
 Tools: Git, Figma, Netlify, VS Code, Postman
 
 == EXPERIENCE ==
-Junior Fullstack Developer at Engtech Global Solution Inc., Butuan City (August 2025 – February 2026)
+Junior Fullstack Developer at Engtech Global Solution Inc., Butuan City (August 2025 - February 2026)
 - Contributed to full-stack development of an enterprise ERP Accounting module using Vue.js and Laravel
 - Consistently delivered 4-5 feature tickets per week based on task complexity
 - Debugged and resolved defects using systematic root-cause analysis with senior developers
@@ -53,27 +54,27 @@ Junior Fullstack Developer at Engtech Global Solution Inc., Butuan City (August 
 
 == PROJECTS ==
 
-Funds Recorder (2025) — Solo Developer
+Funds Recorder (2025) - Solo Developer
 A desktop GUI application for managing financial records with full CRUD functionality.
 Stack: Java, Swing, File I/O
 
-Faculty Evaluation with Sentiment Analysis (2025) — Team Developer (Thesis)
+Faculty Evaluation with Sentiment Analysis (2025) - Team Developer (Thesis)
 An AI-powered evaluation platform using NLP and sentiment analysis to classify student feedback.
 Stack: Python, Flask, PostgreSQL, Google Colab, Render, NLP
 
-Tourist Spot App (2025) — Solo Developer (Capstone)
+Tourist Spot App (2025) - Solo Developer (Capstone)
 A cross-platform mobile app for discovering tourist destinations with real-time navigation.
 Stack: Flutter, Firebase, Firestore, OpenStreetMap
 
-Sigma Accounting System (2025) — Junior Developer (Internship)
+Sigma Accounting System (2025) - Junior Developer (Internship)
 Contributed to an accounting system to streamline financial management and reporting.
 Stack: Nuxt.js, Laravel, MySQL, TailwindCSS, TypeScript, PHP
 
-Predicting Graduate Competitiveness (2025) — Solo Developer
+Predicting Graduate Competitiveness (2025) - Solo Developer
 A web app that predicts graduate competitiveness using a Random Forest ML model.
 Stack: Python, Flask, Pandas, scikit-learn, Google Colab, Render
 
-Personal Portfolio (2025) — Solo Developer
+Personal Portfolio (2025) - Solo Developer
 My personal portfolio with 3D scenes, scroll animations, terminal loader, and this AI assistant.
 Stack: Nuxt 4, TresJS, GSAP, Lenis, TailwindCSS, PrimeVue
 Live: dapper-frangollo-1cca87.netlify.app
@@ -83,10 +84,10 @@ Bachelor of Science in Computer Science, ACLC College of Butuan (2025)
 Thesis: Web-Based Faculty Evaluation with Sentiment Analysis
 
 == CERTIFICATIONS ==
-- Intermediate SQL — DataCamp, 2025
-- Introduction to SQL — DataCamp, 2025
-- Introduction to AI — Google, 2026
-- Maximize Productivity with AI Tools — Google, 2026
+- Intermediate SQL - DataCamp, 2025
+- Introduction to SQL - DataCamp, 2025
+- Introduction to AI - Google, 2026
+- Maximize Productivity with AI Tools - Google, 2026
 
 == LANGUAGES ==
 Filipino/Tagalog, Bisaya/Cebuano, English
@@ -156,39 +157,39 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "messages array required" }) };
   }
 
-  const geminiMessages = messages
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  const systemPrompt = PORTFOLIO_CONTEXT;
+  const chatHistory = messages
     .slice(-10)
     .filter((m) => m.role && m.content && typeof m.content === "string")
     .map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content.slice(0, 1000) }],
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: m.content.slice(0, 1000),
     }));
 
-  const firstUserIdx = geminiMessages.findIndex((m) => m.role === "user");
-  const trimmed = firstUserIdx >= 0 ? geminiMessages.slice(firstUserIdx) : geminiMessages;
+  const cfMessages = [
+    { role: "system", content: systemPrompt },
+    ...chatHistory,
+  ];
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.1-8b-instruct`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: PORTFOLIO_CONTEXT }],
-          },
-          contents: trimmed,
-          generationConfig: {
-            maxOutputTokens: 400,
-            temperature: 0.7,
-          },
-        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiToken}`,
+        },
+        body: JSON.stringify({ messages: cfMessages }),
       }
     );
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      console.error("Gemini API error:", err);
+      console.error("Cloudflare AI error:", err);
       return {
         statusCode: 502,
         headers,
@@ -198,7 +199,7 @@ exports.handler = async (event) => {
 
     const data = await response.json();
     const text =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ??
+      data.result?.response ??
       "Sorry, I couldn't generate a response.";
 
     return {
